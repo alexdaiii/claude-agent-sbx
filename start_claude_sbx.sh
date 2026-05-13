@@ -1,23 +1,9 @@
-# Claude Code with ACP
-
-Adds `@agentclientprotocol/claude-agent-acp` to the standard Claude Code docker sbx sandbox.
-
-## Usage
-
-Follow the instructions in this blog: https://olegselajev.substack.com/p/safe-coding-agents-in-intellij-idea, to get started.
-You will need to modify the script presented in their blog for starting the OpenCode sandbox.
-
-I recommend writing this script in the project file instead of the `~` home dir
-since, you might need project specific volumes mounted to the microVM.
-
-```shell
 #!/bin/bash
 
 # docker sandboxes does not allow spaces, _ in names
 # (and possibly other stuff but these are the only ones this script deals with)
 # replace spaces and underscores with dashes
 SANDBOX="claude-$(basename "$PWD" | tr '_ ' '-')"
-CREATED=0
 # can be empty/blank also
 VOLUMES=(
   "/my/additional/data/volume"
@@ -53,10 +39,7 @@ if ! sbx create --name "$SANDBOX" claude "$PWD" "${VOLUMES[@]}" >>/tmp/claude-sa
             echo "$(date): failed to recreate sandbox $SANDBOX" >>/tmp/claude-sandbox.log
             exit 1
         fi
-        CREATED=1
     fi
-else
-    CREATED=1
 fi
 
 install_acp
@@ -64,23 +47,3 @@ install_acp
 # Run Claude Code in ACP mode over stdio
 echo "$(date): starting claude code acp in sandbox $SANDBOX" >>/tmp/claude-sandbox.log
 exec sbx exec -i "$SANDBOX" claude-agent-acp
-```
-
-Remember to `chmod +x` whatever you call the script so JetBrains/Zed can run it.
-
-Then in JetBrains AI Chat, click on the 3 dots icon to bring up the menu,
-add a custom agent and add the following to the `acp.json` file:
-
-
-```json
-{
-  ... other stuff like mcp_servers ...
-  "agent_servers": {
-    "claude-code-sbx": {
-      "command": "<MY PROJECT DIR>/start_claude_sbx.sh",
-      "args": []
-    }
-  }
-}
-
-```
