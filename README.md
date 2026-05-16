@@ -1,5 +1,9 @@
 # Claude Code with ACP
 
+Due to changes with Claude Agent SDK [1](https://www.reddit.com/r/ClaudeCode/comments/1tc832e/anthropic_just_ripped_off_everyone_and_they_still/), [2](https://zed.dev/blog/anthropic-subscription-changes) this method will use the "SDK credit" starting June 15.
+
+## Description
+
 Adds `@agentclientprotocol/claude-agent-acp` to the standard Claude Code docker sbx sandbox.
 
 ## Usage
